@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Titulo</title>
+        <style>
+            html, body { margin: 0; padding: 0; overflow: hidden; }
+            #text {
+                position: absolute;
+                padding: 10px;
+                width: 100%;
+                text-align: center;
+                color: #FFFFFF;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="text">Cubos<br/>
+        </div>
+        <script src="three.min.js"></script>
+        <script src="OrbitControls.js"></script>
+    
+    <script>
+
+function createPolyhedronGeometry(n) {
+
+        // Escena
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);    
+        renderer = new THREE.WebGLRenderer();
+        renderer.setClearColor(0x000000, 1.0);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+
+  const vertices = [15];
+  const faces = [5];
+  const radius = 1;
+
+  // Generate vertices
+  for (let i = 0; i < n; i++) {
+    const angle = (i / n) * Math.PI * 2;
+    const x = Math.cos(angle) * radius;
+    const y = Math.sin(angle) * radius;
+    vertices.push(new THREE.Vector3(x, y, 0));
+  }
+
+  // Generate faces
+  for (let i = 0; i < n; i++) {
+    const a = i;
+    const b = (i + 1) % n;
+    const c = n;
+    faces.push(new THREE.Face3(a, b, c));
+  }
+
+  // Add center vertex
+  vertices.push(new THREE.Vector3(0, 0, 0));
+
+  // Create geometry
+  const geometry = new THREE.Geometry();
+  geometry.vertices = vertices;
+  geometry.faces = faces;
+
+  // Compute face normals
+  geometry.computeFaceNormals();
+
+  return geometry;
+}
+        //Crear la Grilla
+        var gridHelperXZ = new THREE.GridHelper( size, divisions, color2, color2);
+
+        //Flechas
+        var arrowX = new THREE.ArrowHelper( x, origin, arrowSize, colorR );
+        var arrowY = new THREE.ArrowHelper( y, origin, arrowSize, colorG );
+        var arrowZ = new THREE.ArrowHelper( z, origin, arrowSize, colorB );
+			
+        //Cámara
+        camera.position.x = 20;
+        camera.position.y = 20;
+        camera.position.z = 20;
+        camera.lookAt(scene.position);  
+
+       
+        scene.add(gridHelperXZ);
+        scene.add(arrowX);	
+        scene.add(arrowY);	
+        scene.add(arrowZ);
+
+        renderer.render(scene, camera);
+    }
+    dodecaedro();  
+
+    </script>
+  </body>
+</html>
